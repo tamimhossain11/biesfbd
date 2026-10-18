@@ -1,4 +1,5 @@
-/* Seeds the first admin + all website copy from the brief. Safe to re-run: only fills empty tables. */
+/* Seeds the first admin + all website copy from the brief.
+ * Safe to re-run (it runs on every Vercel deploy): the content is only seeded once. */
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -17,6 +18,11 @@ async function main() {
     }
   } else {
     console.warn("! ADMIN_EMAIL / ADMIN_PASSWORD not set; no admin user created.");
+  }
+
+  if (await db.setting.findUnique({ where: { key: "seeded" } })) {
+    console.log("✓ Content already seeded; skipping.");
+    return;
   }
 
   if ((await db.faq.count()) === 0) {
@@ -133,6 +139,8 @@ async function main() {
     });
     console.log("✓ Gallery seeded");
   }
+
+  await db.setting.create({ data: { key: "seeded", value: new Date().toISOString() } });
 }
 
 main()

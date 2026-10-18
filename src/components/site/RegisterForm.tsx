@@ -17,7 +17,7 @@ const DRAFT_KEY = "biesf-reg-draft-v1";
 const MAX_FILE = 10 * 1024 * 1024;
 const EMPTY_MEMBER: Member = { name: "", classYear: "", institution: "", phone: "" };
 
-export function RegisterForm() {
+export function RegisterForm({ directUpload = false }: { directUpload?: boolean }) {
   const router = useRouter();
   const [d, setD] = useState<RegData>(EMPTY_REG);
   const [step, setStep] = useState(0);
@@ -97,7 +97,20 @@ export function RegisterForm() {
     try {
       const fd = new FormData();
       fd.set("data", JSON.stringify(d));
-      if (file) fd.set("file", file);
+      if (file && directUpload) {
+        // Upload straight to Vercel Blob (files can be bigger than the server's request limit).
+        const { upload } = await import("@vercel/blob/client");
+        const safe = file.name.replace(/[^\w.-]+/g, "_").slice(-80) || "file";
+        try {
+          const blob = await upload(`registrations/${safe}`, file, { access: "public", handleUploadUrl: "/api/register/upload", contentType: file.type });
+          fd.set("fileUrl", blob.url);
+          fd.set("fileOriginal", file.name);
+        } catch (err) {
+          setErrors({ file: `Upload failed: ${(err as Error).message}. Try again, or submit without the file.` });
+          setSubmitting(false);
+          return focusFirstError({ file: "x" });
+        }
+      } else if (file) fd.set("file", file);
       const ts = formRef.current?.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value;
       if (ts) fd.set("cf-turnstile-response", ts);
       fd.set("company", (formRef.current?.elements.namedItem("company") as HTMLInputElement | null)?.value ?? "");

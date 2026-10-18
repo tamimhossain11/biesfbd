@@ -35,7 +35,7 @@ export default async function AdminSettings() {
   return (
     <>
       <PageHeader title="Settings & dates" intro="Changes go live on the website immediately.">
-        <a href="/api/admin/backup" className="a-btn border border-slate-300 bg-white"><Database className="size-4" /> Download database backup</a>
+        <a href="/api/admin/backup" className="a-btn border border-slate-300 bg-white"><Database className="size-4" /> Download full backup (JSON)</a>
       </PageHeader>
       <ActionForm action={saveSettingsAction} className="max-w-4xl space-y-5">
         <Section title="Switches">

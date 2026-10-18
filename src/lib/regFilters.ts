@@ -16,8 +16,9 @@ export function buildWhere(f: RegFilters): Prisma.RegistrationWhereInput {
   if (f.type) where.entryType = f.type;
   if (f.q) {
     const q = f.q;
-    // SQLite LIKE is case-insensitive for ASCII.
-    where.OR = ["regId", "fullName", "email", "whatsapp", "institution", "projectTitle", "district", "supervisorName"].map((k) => ({ [k]: { contains: q } }));
+    where.OR = ["regId", "fullName", "email", "whatsapp", "institution", "projectTitle", "district", "supervisorName"].map((k) => ({
+      [k]: { contains: q, mode: "insensitive" as const },
+    }));
   }
   return where;
 }

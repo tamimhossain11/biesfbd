@@ -106,7 +106,7 @@ export default async function RegistrationDetail({ params }: { params: Promise<{
               <Row k="Paper ready?" v={r.paperReady} />
               <Row k="Heard from" v={r.heardFrom} />
               <Row k="File" v={r.fileName && (
-                <a href={`/api/admin/files/${r.fileName}`} target="_blank" className="inline-flex items-center gap-1.5 text-royal hover:underline"><FileDown className="size-4" /> {r.fileOriginal || r.fileName}</a>
+                <a href={`/api/admin/files/${r.id}`} target="_blank" className="inline-flex items-center gap-1.5 text-royal hover:underline"><FileDown className="size-4" /> {r.fileOriginal || r.fileName}</a>
               )} />
             </dl>
             <h3 className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Summary</h3>

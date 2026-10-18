@@ -27,7 +27,7 @@ export default async function AdminAlbum({ params }: { params: Promise<{ id: str
           <ActionForm action={uploadPhotos} className="space-y-3" resetOnSuccess>
             <input type="hidden" name="albumId" value={album.id} />
             <input type="file" name="photos" multiple required accept="image/jpeg,image/png,image/webp" className="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:font-semibold" />
-            <p className="text-xs text-slate-400">Select several at once (up to ~50 MB per upload). Photos are resized and compressed automatically.</p>
+            <p className="text-xs text-slate-400">Select up to about 10 photos at a time. They are resized in your browser and compressed automatically.</p>
             <SubmitButton pendingText="Uploading…">Upload</SubmitButton>
           </ActionForm>
         </section>

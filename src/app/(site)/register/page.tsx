@@ -21,7 +21,7 @@ export default async function RegisterPage() {
       <section className="container-x grid gap-8 pb-16 pt-6 lg:grid-cols-[1fr_300px]">
         <div>
           {s.registrationOpen ? (
-            <RegisterForm />
+            <RegisterForm directUpload={Boolean(process.env.BLOB_READ_WRITE_TOKEN)} />
           ) : (
             <div className="card p-8 text-center">
               <Lock className="mx-auto size-10 text-royal" />

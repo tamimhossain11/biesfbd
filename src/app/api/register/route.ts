@@ -5,7 +5,7 @@ import { sendRegistrationEmails } from "@/lib/mail";
 import { cleanPhone, coerce, isMinor, isTeam, showPassport, teamMembers, validateAll } from "@/lib/registration";
 import { getSettings } from "@/lib/settings";
 import { clientIp, rateLimit, verifyTurnstile } from "@/lib/spam";
-import { savePrivateUpload } from "@/lib/storage";
+import { savePrivateUpload, useBlob, validRegistrationBlobUrl } from "@/lib/storage";
 
 export async function POST(req: Request) {
   const s = await getSettings();
@@ -39,9 +39,16 @@ export async function POST(req: Request) {
   const errors = validateAll(data);
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 422 });
 
-  let upload: Awaited<ReturnType<typeof savePrivateUpload>> = null;
+  // Either the browser already uploaded the file to Vercel Blob (fileUrl), or it was sent here (local disk).
+  let upload: { name: string; original: string | null } | null = null;
+  const fileUrl = String(fd.get("fileUrl") ?? "");
   const file = fd.get("file");
-  if (file instanceof File && file.size > 0) {
+  if (fileUrl) {
+    if (!useBlob() || !validRegistrationBlobUrl(fileUrl)) {
+      return NextResponse.json({ errors: { file: "File upload failed. Please choose the file again." } }, { status: 422 });
+    }
+    upload = { name: fileUrl, original: String(fd.get("fileOriginal") ?? "").slice(0, 200) || null };
+  } else if (file instanceof File && file.size > 0) {
     try {
       upload = await savePrivateUpload(file);
     } catch (e) {

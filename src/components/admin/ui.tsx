@@ -8,6 +8,35 @@ import { cn } from "@/lib/utils";
 
 const PendingContext = createContext(false);
 
+/**
+ * Shrink photos in the browser before upload (max 2000px, WebP), so big phone photos fit
+ * under the hosting request limit (4.5 MB on Vercel). The server compresses again with sharp.
+ */
+async function compressImages(fd: FormData) {
+  const out = new FormData();
+  for (const [key, value] of fd.entries()) {
+    if (value instanceof File && value.size > 0 && /^image\/(jpeg|png|webp)$/.test(value.type) && value.size > 400_000) {
+      try {
+        const bitmap = await createImageBitmap(value);
+        const scale = Math.min(1, 2000 / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/webp", 0.85));
+        if (blob && blob.size < value.size) {
+          out.append(key, new File([blob], value.name.replace(/\.\w+$/, "") + ".webp", { type: "image/webp" }));
+          continue;
+        }
+      } catch {
+        // Fall back to the original file.
+      }
+    }
+    out.append(key, value);
+  }
+  return out;
+}
+
 export function SubmitButton({ children, className, pendingText = "Saving…" }: { children: React.ReactNode; className?: string; pendingText?: string }) {
   const status = useFormStatus();
   const ctxPending = useContext(PendingContext);
@@ -45,9 +74,9 @@ export function ActionForm({
     <form
       ref={ref}
       className={className}
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        const fd = new FormData(e.currentTarget);
+        const fd = await compressImages(new FormData(e.currentTarget));
         startTransition(() => formAction(fd));
       }}
     >

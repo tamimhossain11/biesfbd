@@ -1,36 +1,30 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { rm } from "node:fs/promises";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { STATUSES } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { DEFAULT_SETTINGS, saveSettings, type SiteSettings } from "@/lib/settings";
-import { MEDIA_DIR, PRIVATE_DIR, safeName, saveMediaImage } from "@/lib/storage";
+import { removeStored, saveMediaImage } from "@/lib/storage";
 import { bool, int, slugify, str } from "@/lib/utils";
 
 export type ActionState = { ok?: string; error?: string };
 
 const files = (fd: FormData, k: string) => fd.getAll(k).filter((f): f is File => f instanceof File && f.size > 0);
 
-async function removeMedia(url: string | null | undefined) {
-  const name = url?.startsWith("/media/") ? safeName(url.slice(7)) : null;
-  if (name) await rm(path.join(MEDIA_DIR, name), { force: true });
-}
 
 /** Keep an existing image, replace it with an upload, or clear it. */
 async function imageField(fd: FormData, current: string | null) {
   const upload = files(fd, "image")[0];
   if (upload) {
     const url = await saveMediaImage(upload);
-    await removeMedia(current);
+    await removeStored(current);
     return url;
   }
   if (bool(fd, "removeImage")) {
-    await removeMedia(current);
+    await removeStored(current);
     return null;
   }
   return current;
@@ -57,8 +51,7 @@ export async function updateRegistration(id: number, fd: FormData) {
 export async function deleteRegistration(id: number) {
   await requireAdmin();
   const reg = await db.registration.delete({ where: { id } }).catch(() => null);
-  const name = reg?.fileName ? safeName(reg.fileName) : null;
-  if (name) await rm(path.join(PRIVATE_DIR, name), { force: true });
+  await removeStored(reg?.fileName);
   redirect("/admin/registrations");
 }
 
@@ -102,7 +95,7 @@ export async function saveNews(_prev: ActionState, fd: FormData): Promise<Action
 export async function deleteNews(id: number) {
   await requireUser();
   const post = await db.newsPost.delete({ where: { id } }).catch(() => null);
-  await removeMedia(post?.image);
+  await removeStored(post?.image);
   revalidatePath("/admin/news");
 }
 
@@ -143,7 +136,7 @@ export async function saveAchievement(_prev: ActionState, fd: FormData): Promise
 export async function deleteAchievement(id: number) {
   await requireUser();
   const a = await db.achievement.delete({ where: { id } }).catch(() => null);
-  await removeMedia(a?.image);
+  await removeStored(a?.image);
   revalidatePath("/admin/achievements");
 }
 
@@ -223,7 +216,7 @@ export async function deleteAlbum(id: number) {
   await requireUser();
   const photos = await db.galleryPhoto.findMany({ where: { albumId: id } });
   await db.galleryAlbum.delete({ where: { id } }).catch(() => null);
-  for (const p of photos) await removeMedia(p.url);
+  for (const p of photos) await removeStored(p.url);
   redirect("/admin/gallery");
 }
 
@@ -258,7 +251,7 @@ export async function deletePhoto(id: number) {
   await requireUser();
   const p = await db.galleryPhoto.delete({ where: { id } }).catch(() => null);
   if (!p) return;
-  await removeMedia(p.url);
+  await removeStored(p.url);
   revalidatePath(`/admin/gallery/${p.albumId}`);
 }
 
