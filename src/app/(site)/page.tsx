@@ -76,6 +76,13 @@ export default async function HomePage() {
             <span className="font-bold text-dob">Dreams of Bangladesh</span>: Official Representative &amp; National Selection Body of
             BIESF for Bangladesh
           </p>
+          {s.authorizationLetter && (
+            <p className="mt-2 text-center">
+              <Link href="/about#official-letter" className="inline-flex items-center gap-1.5 text-sm font-semibold text-royal hover:underline">
+                <BadgeCheck className="size-4 text-dob" /> See our official invitation from ICGI
+              </Link>
+            </p>
+          )}
         </section>
 
         {/* 3. Highlights */}

@@ -50,8 +50,8 @@ export default async function AdminSettings() {
         <Section title="Event dates & venue">
           <Text k="offlineDates" label="Offline dates (long)" placeholder="16–20 November 2026" />
           <Text k="offlineShort" label="Offline dates (short)" placeholder="16–20 Nov" />
-          <Text k="onlineDates" label="Online dates (long)" placeholder="25–27 November 2026" />
-          <Text k="onlineShort" label="Online dates (short)" placeholder="25–27 Nov" />
+          <Text k="onlineDates" label="Online dates (long)" placeholder="24–27 November 2026" />
+          <Text k="onlineShort" label="Online dates (short)" placeholder="24–27 Nov" />
           <Text k="venueName" label="Venue name" />
           <Text k="venueAddress" label="Venue address" />
           <div className="sm:col-span-2">
@@ -81,8 +81,8 @@ export default async function AdminSettings() {
             <label className="mt-2 flex items-center gap-1.5 text-xs text-slate-600"><input type="checkbox" name="resetHero" /> Reset to default Bali photo</label>
           </div>
           <div>
-            <label className="a-label">ICGI authorization letter (About page)</label>
-            {s.authorizationLetter ? <img src={s.authorizationLetter} alt="" className="mb-2 h-24 rounded-lg border object-contain" /> : <p className="mb-2 text-xs text-slate-400">Not uploaded: the section is hidden on the About page.</p>}
+            <label className="a-label">Official ICGI letter (About page)</label>
+            {s.authorizationLetter ? <img src={s.authorizationLetter} alt="" className="mb-2 h-24 rounded-lg border object-contain" /> : <p className="mb-2 text-xs text-slate-400">None: the section is hidden on the About page.</p>}
             <input type="file" name="authorizationLetterFile" accept="image/jpeg,image/png,image/webp" className="text-sm" />
             {s.authorizationLetter && <label className="mt-2 flex items-center gap-1.5 text-xs text-slate-600"><input type="checkbox" name="removeLetter" /> Remove</label>}
           </div>

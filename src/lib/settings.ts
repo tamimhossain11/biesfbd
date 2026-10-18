@@ -30,7 +30,7 @@ export type SiteSettings = {
   // Media
   heroImage: string;
   promoVideoUrl: string; // YouTube link
-  authorizationLetter: string; // image URL for About page
+  authorizationLetter: string; // official ICGI letter image for the About page ("" = hidden)
 
   // Tracking
   metaPixelId: string;
@@ -50,8 +50,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   offlineDates: "16–20 November 2026",
   offlineShort: "16–20 Nov",
-  onlineDates: "25–27 November 2026",
-  onlineShort: "25–27 Nov",
+  onlineDates: "24–27 November 2026",
+  onlineShort: "24–27 Nov",
   venueName: "Balai Diklat Industri Denpasar",
   venueAddress: "Jl. WR Supratman No. 302, Denpasar, Bali, Indonesia",
   deadlineNotice: "",
@@ -62,7 +62,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   heroImage: "/photos/hero-ulun-danu.webp",
   promoVideoUrl: "",
-  authorizationLetter: "",
+  authorizationLetter: "/documents/icgi-invitation-letter.webp", // redacted: no ICGI contacts / old deadline
 
   metaPixelId: "",
   gaMeasurementId: "",

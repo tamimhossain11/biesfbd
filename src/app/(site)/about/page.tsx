@@ -102,11 +102,40 @@ export default async function AboutPage() {
       </section>
 
       {s.authorizationLetter && (
-        <section className="container-x py-14 sm:py-20">
-          <SectionHeading eyebrow="Official authorization" title="ICGI authorization letter" intro="Dreams of Bangladesh is authorized by ICGI as the Official Representative of BIESF in Bangladesh." />
-          <a href={s.authorizationLetter} target="_blank" rel="noopener" className="card block max-w-xl overflow-hidden p-2">
-            <Image src={s.authorizationLetter} alt="ICGI authorization letter for Dreams of Bangladesh" width={1200} height={1600} className="h-auto w-full rounded-xl" />
-          </a>
+        <section id="official-letter" className="container-x scroll-mt-28 py-14 sm:py-20">
+          <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.1fr]">
+            <div>
+              <SectionHeading
+                eyebrow="Official letter"
+                title="Officially invited by ICGI"
+                intro="ICGI, the organiser of BIESF 2026, has officially invited the Dreams of Bangladesh delegation from Bangladesh to take part in the Bali International Engineering Science Fair 2026."
+              />
+              <ul className="space-y-3 text-[15px] text-navy/85">
+                {[
+                  "Signed by Kamal Putra, CEO of ICGI (Indonesian Centre for Giftedness Innovation)",
+                  `Offline competition: ${s.offlineDates}, Bali`,
+                  `Online competition: ${s.onlineDates}, Zoom`,
+                  "In collaboration with the Faculty of Engineering and Technology, IPB University, and IYSA",
+                ].map((t) => (
+                  <li key={t} className="flex gap-2.5"><BadgeCheck className="mt-0.5 size-5 shrink-0 text-dob" />{t}</li>
+                ))}
+              </ul>
+              <p className="mt-6 rounded-2xl bg-cyan-light p-4 text-sm text-navy/80">
+                ICGI contact details and outdated deadline information are hidden on this website. For anything about BIESF 2026 in Bangladesh, please contact Dreams of Bangladesh.
+              </p>
+              <a href={s.authorizationLetter} target="_blank" rel="noopener" className="btn btn-ghost mt-6">View full letter <ArrowRight className="size-4" /></a>
+            </div>
+            <a href={s.authorizationLetter} target="_blank" rel="noopener" className="card group block overflow-hidden p-2 transition hover:shadow-lift" aria-label="Open the official invitation letter from ICGI">
+              <Image
+                src={s.authorizationLetter}
+                alt="Official invitation letter from ICGI to the Dreams of Bangladesh delegation for BIESF 2026"
+                width={1600}
+                height={2071}
+                sizes="(min-width:1024px) 560px, 100vw"
+                className="h-auto w-full rounded-xl"
+              />
+            </a>
+          </div>
         </section>
       )}
 

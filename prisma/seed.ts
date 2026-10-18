@@ -32,7 +32,7 @@ async function main() {
       ["Who can join?", "School, college and university students in Bangladesh.", true],
       ["Can I join alone?", "Yes, individually or as a team of up to 6 with 1 supervisor.", true],
       ["Is there a selection round?", "No exam round. Selection is by registration, project review and a short interview with DoB.", true],
-      ["Offline or online?", "Offline = present in Bali (16–20 Nov). Online = present from Bangladesh on Zoom (25–27 Nov).", false],
+      ["Offline or online?", "Offline = present in Bali (16–20 Nov). Online = present from Bangladesh on Zoom (24–27 Nov).", false],
       ["Do I need a paper?", "Yes, a short paper in English. We will guide you.", false],
       ["What is the fee?", "Contact us on WhatsApp: 01754002201 / 01746342152.", false],
       ["Who are the international judges?", "Judges appointed by ICGI. DoB only manages the Bangladesh selection.", false],
@@ -96,7 +96,7 @@ async function main() {
           slug: "registration-open-biesf-2026",
           kind: "News",
           excerpt: "School, college and university students can now register online for the Bangladesh selection of BIESF 2026.",
-          body: "Dreams of Bangladesh has opened registration for the Bangladesh selection of the 1st Bali International Engineering Science Fair (BIESF 2026).\n\nStudents can join individually or as a team of up to 6 members with 1 supervisor, in any of the 8 categories. Choose to present offline in Bali (16–20 November 2026) or online on Zoom from Bangladesh (25–27 November 2026).\n\nThere is no exam round. Selection is by registration, project review and a short interview with the DoB team. Register on this website and our team will contact you on WhatsApp within 24–48 hours.",
+          body: "Dreams of Bangladesh has opened registration for the Bangladesh selection of the 1st Bali International Engineering Science Fair (BIESF 2026).\n\nStudents can join individually or as a team of up to 6 members with 1 supervisor, in any of the 8 categories. Choose to present offline in Bali (16–20 November 2026) or online on Zoom from Bangladesh (24–27 November 2026).\n\nThere is no exam round. Selection is by registration, project review and a short interview with the DoB team. Register on this website and our team will contact you on WhatsApp within 24–48 hours.",
           publishedAt: new Date(now),
         },
         {
