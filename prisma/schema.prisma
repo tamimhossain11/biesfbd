@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("EDITOR") // ADMIN | EDITOR
+  createdAt    DateTime @default(now())
+}
+
+// Single-row key/value store for site settings (JSON value).
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model Registration {
+  id        Int      @id @default(autoincrement())
+  regId     String?  @unique
+  status    String   @default("New")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // A. Participation
+  mode        String // Offline (Bali) | Online (Zoom) | Not sure
+  entryType   String // Individual | Team
+  memberCount Int    @default(1)
+  category    String
+  level       String // School | College | University
+
+  // B. Student / team leader
+  fullName    String
+  dateOfBirth String
+  classYear   String
+  whatsapp    String
+  email       String
+  district    String
+  institution String
+  passport    String?
+
+  // C. Team & supervisor
+  members              String  @default("[]") // JSON: [{name, classYear, institution, phone}]
+  supervisorName       String?
+  supervisorInstitution String?
+  supervisorPhone      String?
+  guardianName         String?
+  guardianPhone        String?
+
+  // D. Project
+  projectTitle   String
+  projectSummary String
+  projectStage   String
+  paperReady     String
+  fileName       String? // stored file name in private storage
+  fileOriginal   String?
+  heardFrom      String?
+
+  notes Note[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Note {
+  id             Int          @id @default(autoincrement())
+  registrationId Int
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  author         String
+  text           String
+  createdAt      DateTime     @default(now())
+}
+
+model NewsPost {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  kind        String   @default("News") // News | Result
+  excerpt     String   @default("")
+  body        String   @default("")
+  image       String?
+  published   Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+  id          Int     @id @default(autoincrement())
+  event       String // e.g. WICE 2026
+  location    String // e.g. Malaysia
+  summary     String  @default("")
+  teams       Int?
+  gold        Int?
+  silver      Int?
+  bronze      Int?
+  platinum    Int?
+  special     String? // e.g. IYSA Special Award
+  image       String?
+  sortOrder   Int     @default(0)
+  showOnHome  Boolean @default(true)
+}
+
+model GalleryAlbum {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String         @default("")
+  sortOrder   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  photos      GalleryPhoto[]
+}
+
+model GalleryPhoto {
+  id        Int          @id @default(autoincrement())
+  albumId   Int
+  album     GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String       @default("")
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now())
+}
+
+model Faq {
+  id         Int     @id @default(autoincrement())
+  question   String
+  answer     String
+  sortOrder  Int     @default(0)
+  showOnHome Boolean @default(false)
+}
+
+model SupportItem {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  icon        String @default("Sparkles")
+  sortOrder   Int    @default(0)
+}
+
+model ScheduleItem {
+  id        Int    @id @default(autoincrement())
+  date      String // e.g. 16 Nov
+  activity  String
+  bdTime    String
+  mode      String @default("Offline") // Offline | Online
+  sortOrder Int    @default(0)
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String?
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

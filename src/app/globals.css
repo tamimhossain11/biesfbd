@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand palette (from the brief) */
+  --color-royal: #163496;
+  --color-royal-600: #1d40b0;
+  --color-royal-50: #eef3fb;
+  --color-navy: #0e1e5c;
+  --color-orange: #f0a828;
+  --color-orange-600: #d98f12;
+  --color-cyan-light: #d6f4fc;
+  --color-dob: #00784a;
+  --color-dob-50: #e3f4ec;
+  --color-wa: #25d366;
+  --color-wa-600: #1eb457;
+  --color-line: #dbe4f3;
+
+  --shadow-card: 0 1px 2px rgb(14 30 92 / 0.06), 0 8px 24px -8px rgb(14 30 92 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(14 30 92 / 0.08), 0 18px 40px -12px rgb(14 30 92 / 0.25);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-white text-navy antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply text-balance;
+  }
+  ::selection {
+    @apply bg-orange/40;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .bg-grid {
+    background-color: var(--color-royal-50);
+    background-image:
+      linear-gradient(var(--color-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .bg-grid-dark {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .card {
+    @apply rounded-2xl bg-white shadow-card ring-1 ring-line/70;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition
+      focus-visible:outline-none focus-visible:ring-4 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-lg {
+    @apply px-7 py-3.5 text-base;
+  }
+  .btn-register {
+    @apply bg-orange text-navy shadow-[0_6px_18px_-6px_rgb(240_168_40/0.8)] hover:bg-orange-600 focus-visible:ring-orange/40;
+  }
+  .btn-wa {
+    @apply bg-wa text-white shadow-[0_6px_18px_-6px_rgb(37_211_102/0.8)] hover:bg-wa-600 focus-visible:ring-wa/40;
+  }
+  .btn-primary {
+    @apply bg-royal text-white hover:bg-royal-600 focus-visible:ring-royal/30;
+  }
+  .btn-ghost {
+    @apply bg-white text-royal ring-1 ring-line hover:bg-royal-50 focus-visible:ring-royal/30;
+  }
+  .btn-outline-white {
+    @apply text-white ring-2 ring-white/70 hover:bg-white/10 focus-visible:ring-white/40;
+  }
+
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-orange-600;
+  }
+  .h-section {
+    @apply text-3xl font-bold tracking-tight text-royal sm:text-4xl;
+  }
+  .underline-orange {
+    @apply mt-3 block h-1.5 w-20 rounded-full bg-orange;
+  }
+
+  .prose-site {
+    @apply text-[15px] leading-7 text-navy/85;
+  }
+  .prose-site p + p {
+    @apply mt-4;
+  }
+
+  /* Forms */
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-navy;
+  }
+  .input {
+    @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-navy placeholder:text-slate-400
+      outline-none transition focus:border-royal focus:ring-4 focus:ring-royal/10;
+  }
+  .input-error {
+    @apply border-rose-400 focus:border-rose-500 focus:ring-rose-500/10;
+  }
+  .field-error {
+    @apply mt-1 text-xs font-medium text-rose-600;
+  }
+  .choice {
+    @apply flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm font-medium transition
+      hover:border-royal/50 has-[:checked]:border-royal has-[:checked]:bg-royal-50 has-[:checked]:text-royal has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-royal/15;
+  }
+
+  /* Admin */
+  .a-input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-royal focus:ring-2 focus:ring-royal/15;
+  }
+  .a-label {
+    @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+  .a-btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold transition disabled:opacity-60;
+  }
+  .a-card {
+    @apply rounded-xl border border-slate-200 bg-white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes wa-pulse {
+  0% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.55); }
+  70% { box-shadow: 0 0 0 16px rgb(37 211 102 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0); }
+}
+.wa-pulse {
+  animation: wa-pulse 2.4s infinite;
+}
